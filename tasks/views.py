@@ -18,7 +18,7 @@ def index(request):
 
     # counts = Category.objects.annotate(total_tasks=Count(
     #     'todoitem')).order_by("-total_tasks")
-    counts = {c.name: c.total_tasks for c in Category.objects.all().order_by("-total_tasks")}
+    counts = {c.name: c.todos_count for c in Category.objects.all().order_by("-todos_count")}
 
     return render(request, "tasks/index.html", {"counts": counts})
 
