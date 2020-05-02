@@ -10,13 +10,15 @@ def task_cats_added(sender, instance, action, model, **kwargs):
         return
 
     for cat in instance.category.all():
-        slug = cat.slug
+        cat.update(
+            todos_count = TodoItem.objects.filter(category__id=cat.id).count())
+        # slug = cat.slug
 
-        new_count = 0
-        for task in TodoItem.objects.all():
-            new_count += task.category.filter(slug=slug).count()
-
-        Category.objects.filter(slug=slug).update(todos_count=new_count)
+        # new_count = 0
+        # for task in TodoItem.objects.all():
+        #     new_count += task.category.filter(slug=slug).count()
+        
+        # Category.objects.filter(slug=slug).update(todos_count=new_count)
 
 
 @receiver(m2m_changed, sender=TodoItem.category.through)
