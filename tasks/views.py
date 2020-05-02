@@ -16,9 +16,9 @@ def index(request):
     # 3rd version
     from django.db.models import Count
 
-    counts = Category.objects.annotate(total_tasks=Count(
-        'todoitem')).order_by("-total_tasks")
-    counts = {c.name: c.total_tasks for c in counts}
+    # counts = Category.objects.annotate(total_tasks=Count(
+    #     'todoitem')).order_by("-total_tasks")
+    counts = {c.name: c.total_tasks for c in Category.objects.all().order_by("-total_tasks")}
 
     return render(request, "tasks/index.html", {"counts": counts})
 
