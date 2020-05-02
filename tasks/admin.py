@@ -13,5 +13,6 @@ class TodoItemAdmin(admin.ModelAdmin):
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ('slug', 'name')
+    list_display = '__all__'
+    # list_display = ('slug', 'name')
 
