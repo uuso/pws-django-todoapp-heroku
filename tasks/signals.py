@@ -4,7 +4,7 @@ from tasks.models import TodoItem, Category
 from collections import Counter
 
 
-receiver(post_delete, sender=TodoItem)(lambda: task_cats_removed('dummy', 'dummy', 'post_remove', 'dummy'))
+receiver(post_delete, sender=TodoItem)(lambda **kwargs: task_cats_removed('dummy', 'dummy', 'post_remove', 'dummy'))
 # def task_removed(sender, **kwargs):
 #     task_cats_removed(1,2,"post_remove",3)
 
