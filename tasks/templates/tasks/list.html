@@ -8,7 +8,7 @@
     <ul class="list-inline">
     {% for cat in categories %}
       <li class="list-inline-item">
-        <span class="badge badge-info">{{ cat.name }}</span>
+        <a href="{% url 'tasks:list_by_cat' cat.slug %}"><span class="badge badge-info">{{ cat.name }}</span></a>
       </li>
     {% endfor %}
     </ul>
