@@ -1,15 +1,23 @@
-from django.db.models.signals import m2m_changed
+from django.db.models.signals import m2m_changed, pre_delete
 from django.dispatch import receiver
 from tasks.models import TodoItem, Category
 from collections import Counter
 
 
+@receiver(pre_delete, sender=TodoItem)
+def task_removed(sender, instance, action, model, **kwargs):
+    print("entered pre_delete")
+    for cat in Category.objects.all():
+        Category.objects.filter(id=cat.id).update(
+            todos_count = TodoItem.objects.filter(category__id=cat.id).count())
+
+
 @receiver(m2m_changed, sender=TodoItem.category.through)
 def task_cats_added(sender, instance, action, model, **kwargs):
-    print("----- entered m2m postadd?")
+    print("m2m postadd?")
     if action != "post_add":
         return
-    print("----- entered post_add")
+    print("entered post_add")
 
     for cat in instance.category.all():
         Category.objects.filter(id=cat.id).update(
@@ -25,11 +33,11 @@ def task_cats_added(sender, instance, action, model, **kwargs):
 
 @receiver(m2m_changed, sender=TodoItem.category.through)
 def task_cats_removed(sender, instance, action, model, **kwargs):
-    print("----- entered m2m postremove?")
+    print("m2m postremove?")
     if action != "post_remove":
         return
 
-    print("----- entered post_remove")
+    print("entered post_remove")
     for cat in Category.objects.all():
         Category.objects.filter(id=cat.id).update(
             todos_count = TodoItem.objects.filter(category__id=cat.id).count())
