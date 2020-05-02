@@ -7,9 +7,10 @@ from collections import Counter
 @receiver(post_delete, sender=TodoItem)
 def task_removed(sender, **kwargs):
     print("entered post_delete")
-    for cat in Category.objects.all():
-        Category.objects.filter(id=cat.id).update(
-            todos_count = TodoItem.objects.filter(category__id=cat.id).count())
+    # for cat in Category.objects.all():
+    #     Category.objects.filter(id=cat.id).update(
+    #         todos_count = TodoItem.objects.filter(category__id=cat.id).count())
+    task_cats_removed(1,2,"post_remove",3)
 
 
 @receiver(m2m_changed, sender=TodoItem.category.through)
