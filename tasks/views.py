@@ -66,12 +66,13 @@ class TaskListView(ListView):
         tags = []
         for t in user_tasks:
             tags.append(list(t.category.all()))
+        context["categories"] = filter_tasks(tags)
 
-        categories = []
-        for cat in t.category.all():
-            if cat not in categories:
-                categories.append(cat)
-        context["categories"] = categories
+        # categories = []
+        # for cat in t.category.all():
+        #     if cat not in categories:
+        #         categories.append(cat)
+        # context["categories"] = categories
 
         return context
 
