@@ -6,7 +6,7 @@ from collections import Counter
 
 @receiver(m2m_changed, sender=TodoItem.category.through)
 def task_cats_added(sender, instance, action, model, **kwargs):
-    print("----- entered m2m")
+    print("----- entered m2m postadd?")
     if action != "post_add":
         return
     print("----- entered post_add")
@@ -25,7 +25,7 @@ def task_cats_added(sender, instance, action, model, **kwargs):
 
 @receiver(m2m_changed, sender=TodoItem.category.through)
 def task_cats_removed(sender, instance, action, model, **kwargs):
-    print("----- entered m2m")
+    print("----- entered m2m postremove?")
     if action != "post_remove":
         return
 
