@@ -12,8 +12,10 @@ def task_removed(sender, **kwargs):
 @receiver(m2m_changed, sender=TodoItem.category.through)
 def task_cats_changed(sender, instance, action, model, **kwargs):
     if action == "post_add":
+        # update only the instance's Categories
         qs = instance.category.all()
-    else if action == "post_remove":
+    elif action == "post_remove":
+        # update all the Categories
         qs = Category.objects.all()
     else:
         return
