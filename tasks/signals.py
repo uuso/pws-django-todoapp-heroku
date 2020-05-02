@@ -1,12 +1,12 @@
-from django.db.models.signals import m2m_changed, pre_delete
+from django.db.models.signals import m2m_changed, post_delete
 from django.dispatch import receiver
 from tasks.models import TodoItem, Category
 from collections import Counter
 
 
-@receiver(pre_delete, sender=TodoItem)
+@receiver(post_delete, sender=TodoItem)
 def task_removed(sender, **kwargs):
-    print("entered pre_delete")
+    print("entered post_delete")
     for cat in Category.objects.all():
         Category.objects.filter(id=cat.id).update(
             todos_count = TodoItem.objects.filter(category__id=cat.id).count())
