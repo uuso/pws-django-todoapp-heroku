@@ -4,9 +4,9 @@ from tasks.models import TodoItem, Category
 from collections import Counter
 
 
-@receiver(post_delete, sender=TodoItem)
-def task_removed(sender, **kwargs):
-    task_cats_removed('dummy', 'dummy', 'post_remove', 'dummy')
+# @receiver(post_delete, sender=TodoItem)
+# def task_removed(sender, **kwargs):
+#     task_cats_removed('dummy', 'dummy', 'post_remove', 'dummy')
 
 
 @receiver(m2m_changed, sender=TodoItem.category.through)
@@ -30,8 +30,8 @@ def task_cats_added(sender, instance, action, model, **kwargs):
 
 @receiver(m2m_changed, sender=TodoItem.category.through)
 def task_cats_removed(sender, instance, action, model, **kwargs):
-    print("m2m postremove?")
-    if action != "post_remove":
+    print("Got relation: %s" % action)
+    if not action in ("post_remove", "post_clear"):
         return
 
     print("entered post_remove")
