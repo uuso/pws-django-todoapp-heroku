@@ -78,14 +78,12 @@ def get_cache():
         username = os.environ['MEMCACHIER_USERNAME']
         password = os.environ['MEMCACHIER_PASSWORD']
         cache = {
-            'default': {
-                'BACKEND': 'django_bmemcached.memcached.BMemcached',
-                'TIMEOUT': None,
-                'LOCATION': servers,
-                'OPTIONS': {
-                    'username': username,
-                    'password': password,
-                }
+            'BACKEND': 'django_bmemcached.memcached.BMemcached',
+            'TIMEOUT': None,
+            'LOCATION': servers,
+            'OPTIONS': {
+                'username': username,
+                'password': password,
             }
         }
     return {'default': cache}
