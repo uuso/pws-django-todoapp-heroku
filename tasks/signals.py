@@ -10,8 +10,8 @@ def task_cats_added(sender, instance, action, model, **kwargs):
         return
 
     for cat in instance.category.all():
-        cat.update(
-            todos_count = TodoItem.objects.filter(category__id=cat.id).count())
+        cat.todos_count = TodoItem.objects.filter(category__id=cat.id).count()
+        cat.save()
         # slug = cat.slug
 
         # new_count = 0
