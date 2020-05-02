@@ -5,7 +5,7 @@ from collections import Counter
 
 
 @receiver(pre_delete, sender=TodoItem)
-def task_removed(sender, instance, action, model, **kwargs):
+def task_removed(sender, **kwargs):
     print("entered pre_delete")
     for cat in Category.objects.all():
         Category.objects.filter(id=cat.id).update(
