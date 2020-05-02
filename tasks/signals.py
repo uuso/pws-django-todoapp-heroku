@@ -10,8 +10,8 @@ def task_cats_added(sender, instance, action, model, **kwargs):
         return
 
     for cat in instance.category.all():
-        cat.todos_count = TodoItem.objects.filter(category__id=cat.id).count()
-        cat.save()
+        Category.objects.filter(id=cat.id).update(
+            todos_count = TodoItem.objects.filter(category__id=cat.id).count())
         # slug = cat.slug
 
         # new_count = 0
@@ -26,10 +26,13 @@ def task_cats_removed(sender, instance, action, model, **kwargs):
     if action != "post_remove":
         return
 
-    cat_counter = Counter()
-    for t in TodoItem.objects.all():
-        for cat in t.category.all():
-            cat_counter[cat.slug] += 1
+    for cat in Category.objects.all():
+        Category.objects.filter(id=cat.id).update(
+            todos_count = TodoItem.objects.filter(category__id=cat.id).count())
+    # cat_counter = Counter()
+    # for t in TodoItem.objects.all():
+    #     for cat in t.category.all():
+    #         cat_counter[cat.slug] += 1
 
-    for slug, new_count in cat_counter.items():
-        Category.objects.filter(slug=slug).update(todos_count=new_count)
+    # for slug, new_count in cat_counter.items():
+    #     Category.objects.filter(slug=slug).update(todos_count=new_count)
