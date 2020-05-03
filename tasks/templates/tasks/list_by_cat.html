@@ -12,7 +12,7 @@
     {% for t in categories %}
       {% if forloop.first %}
       <ul class="list-inline">
-        <li class="list-inline-item">Все категории:</li>
+        <a href="{% url 'tasks:list' %}"><li class="list-inline-item">Все категории:</li></a>
       {% endif %}
       <li class="list-inline-item">
         <a href="{% url "tasks:list_by_cat" t.slug %}">
