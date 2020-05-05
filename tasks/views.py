@@ -1,14 +1,15 @@
+from datetime import datetime
 from django.shortcuts import get_object_or_404, render
+from django.http.response import HttpResponse
 from django.views.generic import ListView
 from django.views.generic.detail import DetailView
+from django.views.decorators.cache import cache_page
 from tasks.models import TodoItem, Category
 
 
-def index(request):
-    
-    from django.db.models import Count
 
-    counts = {c.name: c.todos_count for c in Category.objects.all().order_by("-todos_count")}
+def index(request):
+    counts = {c: c.todos_count for c in Category.objects.all().order_by("-todos_count")}    
 
     return render(request, "tasks/index.html", {"counts": counts})
 
@@ -21,21 +22,23 @@ def tasks_by_cat(request, cat_slug=None):
     u = request.user
     tasks = TodoItem.objects.filter(owner=u).all()
 
-    cat = None
-    if cat_slug:
-        cat = get_object_or_404(Category, slug=cat_slug)
-        tasks = tasks.filter(category__in=[cat])
-
     categories = []
     for t in tasks:
         for cat in t.category.all():
             if cat not in categories:
                 categories.append(cat)
 
+    cat = None
+    if cat_slug:
+        cat = get_object_or_404(Category, slug=cat_slug)
+        tasks = tasks.filter(category__in=[cat])
+
+
     return render(
         request,
         "tasks/list_by_cat.html",
-        {"category": cat, "tasks": tasks, "categories": categories},
+        {"category": cat, "tasks": tasks, 
+        "categories": sorted(categories, key=lambda x: x.todos_count, reverse=True)},
     )
 
 
@@ -56,7 +59,8 @@ class TaskListView(ListView):
         tags = []
         for t in user_tasks:
             tags.append(list(t.category.all()))
-        context["categories"] = filter_tasks(tags)
+        context["categories"] = sorted(
+            filter_tasks(tags), key=lambda cat: cat.todos_count, reverse=True)
 
         # categories = []
         # for cat in t.category.all():
@@ -70,3 +74,7 @@ class TaskListView(ListView):
 class TaskDetailsView(DetailView):
     model = TodoItem
     template_name = "tasks/details.html"
+
+@cache_page(300)
+def cached_page(request):
+    return HttpResponse(f"<p>Cached time: {datetime.now().isoformat()}</p><p>Wait 5 minutes to update.</p>")

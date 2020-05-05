@@ -3,10 +3,22 @@ from django.db import models
 from django.urls import reverse
 
 
+def allthr():
+    for tc in TodoItem.category.through.objects.all():
+        print("[%3d]  %d -item|cat- %d  ::  %s @ %s" % 
+            (tc.id, tc.todoitem_id, tc.category_id,
+            TodoItem.objects.get(id=tc.todoitem_id),
+            Category.objects.get(id=tc.category_id)))
+
+
 class Category(models.Model):
     slug = models.CharField(max_length=128)
     name = models.CharField(max_length=256)
     todos_count = models.PositiveIntegerField(default=0)
+    
+    prior_high = models.PositiveIntegerField(default=0)
+    prior_medium = models.PositiveIntegerField(default=0)
+    prior_low = models.PositiveIntegerField(default=0)
 
     class Meta:
         verbose_name = 'Категория'

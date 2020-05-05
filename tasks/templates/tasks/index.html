@@ -7,7 +7,12 @@
   <h1>Категории и числа</h1>
   <ul>
   {% for cat, count in counts.items %}
-    <li><a href="{% url 'tasks:list_by_cat' cat.slug %}"><span class="badge badge-info">{{ cat }}: {{ count }}</span></a></li>
+    <li><a href="{% url 'tasks:list_by_cat' cat.slug %}">
+    <span class="badge badge-info">{{ cat.name }}: {{ count }} [
+    <span style="color: orange;">{{cat.prior_high}}</span> /
+    <span style="color: yellow;">{{cat.prior_medium}}</span> /
+    <span style="color: lightgreen;">{{cat.prior_low}}</span>]
+    </span></a></li>
   {% empty %}
     <li>Список задач по категориям пуст. Попробуйте добавить их из админки</li>
   {% endfor %}
